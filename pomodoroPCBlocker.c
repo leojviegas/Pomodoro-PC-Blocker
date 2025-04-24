@@ -88,7 +88,7 @@ void blockPC(int tiempoDescanso)
         for (int j = 0; j < 60 / lockEveryXSeconds; j++) // al dividir 60/cada cuanto quiero que se mande el comando de bloquear, hago que ese loop
                                                          // se ejecute por 1 min exactamente
         {
-            //system("rundll32.exe user32.dll,LockWorkStation"); // bloquear PC en sesión actual
+            system("rundll32.exe user32.dll,LockWorkStation"); // bloquear PC en sesión actual
             Sleep(lockEveryXSeconds * 1000);                   // esperar lockEveryXSeconds segundos
         }
     }

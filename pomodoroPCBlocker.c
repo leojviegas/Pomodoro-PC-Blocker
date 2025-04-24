@@ -2,53 +2,85 @@
 #include <stdlib.h>
 #include <Windows.h>
 
-void blockPC();
+int pedirNumero(const char *mensaje);
+void tiempoTrabajo();
+void blockPC(int tiempoDescanso);
 
-int tiempoDeTrabajo = 45;         // tiempo del pomodoro en minutos (periodo de trabajo)
-int tiempoDeDescanso = 15;         // tiempo de descanso en minutos
-int cantidadTotalDePomodoros = 2; // ciclos totales que van a ocurrir
+int tiempoPomodoro = 0;     // tiempo del pomodoro en minutos (periodo de trabajo)
+int tiempoDescansoCorto = 0; // tiempo de descanso en minutos
+int tiempoDescansoLargo = 0;
+int cantidadPomodoros = 0;
+int descansoLargoCada = 0;
 
 int main()
 {
-    printf("Bienvenido al PC time blocker\nelija a continuacion los tiempos en los cuales desea que la PC siga activa\n");
-    printf("elija tiempo de trabajo:\n");
-    scanf("%i", &tiempoDeTrabajo);
-    printf("elija tiempo de descanso:\n");
-    scanf("%i", &tiempoDeDescanso);
-    printf("elija cantidad total de pomodoros a realizarse:\n");
-    scanf("%i", &cantidadTotalDePomodoros);
-    printf("Usted ha elegido %d minutos de trabajo, %d de descanso y %d pomodoros totales\n", tiempoDeTrabajo, tiempoDeDescanso, cantidadTotalDePomodoros);
-    printf("Dando un total de %.2f horas\n", ((tiempoDeTrabajo + tiempoDeDescanso) * cantidadTotalDePomodoros)/60.0);
-    
+    printf("Bienvenido al PC time blocker\n");
+    tiempoPomodoro = pedirNumero("Elija tiempo de trabajo (en minutos):\n");
+    tiempoDescansoCorto = pedirNumero("Elija tiempo de descanso corto (en minutos):\n");
+    tiempoDescansoLargo = pedirNumero("Elija tiempo de descanso largo (en minutos):\n");
+    descansoLargoCada = pedirNumero("Cada cuántos pomodoros desea un descanso largo? (si se eligio 25/5, se recomienda cada 4; si se eligio 50/10, cada 2):\n");
+    cantidadPomodoros = pedirNumero("Elija cantidad total de pomodoros a realizarse:\n");
 
-    for (int i = 0; i < cantidadTotalDePomodoros; i++) // repetir todo el ciclo "cantidadTotalDePomodoros" veces
-    {
-        printf("Pomodoro %d en proceso...\n", i + 1);
-        for (int j = tiempoDeTrabajo; j > 0; j--) // loop para que el programa espere "tiempoDeTrabajo" minutos antes de llamar a blockPC()
-        {
-            //printf("quedan %d minutos para el descanso\n", j);
-            Sleep(60 * 1000); // esperar 1 minuto
-        }
+    printf("Usted ha elegido %d minutos de trabajo, %d de descanso corto, %d de descanso largo y %d pomodoros totales.\n", tiempoPomodoro, tiempoDescansoCorto, tiempoDescansoLargo, cantidadPomodoros);
+    printf("Dando un total de %.2f horas\n", ((tiempoPomodoro + tiempoDescansoCorto) * cantidadPomodoros) / 60.0);
 
-        blockPC();
-    }
-    printf("\nEsperamos que le haya resultado util el programa!\n");
+    tiempoTrabajo();
+    printf("\nEsperamos que le haya resultado útil el programa!\n");
     system("pause");
     return 0;
 }
 
-void blockPC() // manda comando de bloquear PC cada 5s, por "tiempoDeDescanso" minutos. Así te obliga a salir de la PC sí o sí y levantarte
+int pedirNumero(const char *mensaje) {
+    int numero;
+    int resultado;
+    do {
+        printf("%s", mensaje);
+        resultado = scanf("%d", &numero);
+        while (getchar() != '\n'); // Limpiar el buffer de entrada
+        if (resultado != 1) {
+            printf("Entrada inválida. Por favor, ingrese un número.\n");
+        }
+    } while (resultado != 1);
+    return numero;
+}
+
+
+void tiempoTrabajo()
+{
+    for (int i = 0; i < cantidadPomodoros; i++) // repetir todo el ciclo "cantidadTotalDePomodoros" veces
+    {
+        printf("Pomodoro %d en proceso...\n", i + 1);
+        for (int j = tiempoPomodoro; j > 0; j--) // loop para que el programa espere "tiempoDeTrabajo" minutos antes de llamar a blockPC()
+        {
+            // printf("quedan %d minutos para el descanso\n", j);
+            Sleep(60 * 1000); // esperar 1 minuto
+        }
+
+        if (descansoLargoCada > 0 && (i + 1) % descansoLargoCada == 0) // Verificar si corresponde un descanso largo
+        {
+            printf("Descanso largo en proceso...\n");
+            blockPC(tiempoDescansoLargo);
+        }
+        else
+        {
+            printf("Descanso corto en proceso...\n");
+            blockPC(tiempoDescansoCorto);
+        }
+    }
+}
+
+void blockPC(int tiempoDescanso) // Modificar para aceptar el tiempo de descanso como parámetro
 {
     int lockEveryXSeconds = 1;
 
     printf("Tiempo de descanso\n\n");
-    for (int i = 0; i < tiempoDeDescanso; i++)
+    for (int i = 0; i < tiempoDescanso; i++)
     {
         for (int j = 0; j < 60 / lockEveryXSeconds; j++) // al dividir 60/cada cuanto quiero que se mande el comando de bloquear, hago que ese loop
                                                          // se ejecute por 1 min exactamente
         {
             system("rundll32.exe user32.dll,LockWorkStation"); // bloquear PC en sesión actual
-            Sleep(lockEveryXSeconds * 1000); // esperar lockEveryXSeconds segundos
+            Sleep(lockEveryXSeconds * 1000);                   // esperar lockEveryXSeconds segundos
         }
     }
 }

@@ -17,26 +17,26 @@ int minutosTotales = 0;
 int main()
 {
     printf("Bienvenido al PC time blocker\n");
-    tiempoPomodoro = pedirNumero("Elegí tiempo de trabajo (en minutos):\n");
-    tiempoDescansoCorto = pedirNumero("Eli tiempo de descanso corto (en minutos):\n");
-    tiempoDescansoLargo = pedirNumero("Elija tiempo de descanso largo (en minutos):\n");
-    frecuenciaDescLargo = pedirNumero("Cada cuántos pomodoros desea un descanso largo? (si se eligio 25/5, se recomienda cada 4; si se eligio 50/10, cada 2):\n");
-    cantidadPomodoros = pedirNumero("Elija cantidad total de pomodoros a realizarse:\n");
+    tiempoPomodoro = pedirNumero("Elegi tiempo del pomodoro (en minutos):\n");
+    tiempoDescansoCorto = pedirNumero("Elegi tiempo de descanso corto (en minutos):\n");
+    tiempoDescansoLargo = pedirNumero("Elegi tiempo de descanso largo (en minutos):\n");
+    frecuenciaDescLargo = pedirNumero("Cada cuantos pomodoros deseas un descanso largo? (si se eligio 25/5, se recomienda cada 4; si se eligio 50/10, cada 2):\n");
+    cantidadPomodoros = pedirNumero("Elegi cantidad total de pomodoros a realizarse:\n");
     
     cantDescansosLargos = cantidadPomodoros / frecuenciaDescLargo;
     cantDescansosCortos = cantidadPomodoros - cantDescansosLargos;
     minutosTotales = tiempoPomodoro * cantidadPomodoros + tiempoDescansoLargo * cantDescansosLargos + tiempoDescansoCorto * cantDescansosCortos;
     
-    printf("Usted ha elegido %d minutos de trabajo, %d de descanso corto, %d de descanso largo, descanso largo cada %d minutos y %d pomodoros totales.\n", tiempoPomodoro, tiempoDescansoCorto, tiempoDescansoLargo, frecuenciaDescLargo, cantidadPomodoros);
+    printf("\nElegiste %d minutos de pomodoro, %d de descanso corto, %d de descanso largo, descanso largo cada %d minutos y %d pomodoros totales.\n", tiempoPomodoro, tiempoDescansoCorto, tiempoDescansoLargo, frecuenciaDescLargo, cantidadPomodoros);
 
-    printf("Dando un total de %d minutos\n", minutosTotales);
-    printf("que serían %d horas y %d minutos\n", (minutosTotales / 60), (minutosTotales % 60));
+    printf("Dando un total de %d minutos, ", minutosTotales);
+    printf("que serian %d:%d hs\n", (minutosTotales / 60), (minutosTotales % 60));
 
-    printf("Presione ENTER para comenzar el programa\n");
+    printf("\n                             Presiona ENTER para comenzar el programa\n");
     getchar(); // Esperar a que el usuario presione ENTER antes de continuar
 
     tiempoTrabajo();
-    printf("\nEsperamos que le haya resultado útil el programa!\n");
+    printf("\nEsperamos que te haya resultado util el programa!\n");
     system("pause");
     return 0;
 }
@@ -49,7 +49,7 @@ int pedirNumero(const char *mensaje) {
         resultado = scanf("%d", &numero);
         while (getchar() != '\n'); // Limpiar el buffer de entrada
         if (resultado != 1) {
-            printf("Entrada inválida. Por favor, ingrese un número.\n");
+            printf("Entrada invalida. Por favor, ingresa un numero.\n");
         }
     } while (resultado != 1);
     return numero;
@@ -69,12 +69,12 @@ void tiempoTrabajo()
 
         if (frecuenciaDescLargo > 0 && (i + 1) % frecuenciaDescLargo == 0) // Verificar si corresponde un descanso corto o largo
         {
-            printf("Descanso largo en proceso...\n");
+            printf("Descanso largo iniciado...\n");
             blockPC(tiempoDescansoLargo);
         }
         else
         {
-            printf("Descanso corto en proceso...\n");
+            printf("Descanso corto iniciado...\n");
             blockPC(tiempoDescansoCorto);
         }
     }

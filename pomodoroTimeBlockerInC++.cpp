@@ -3,6 +3,8 @@
 #include <chrono>
 #include <cstdlib>
 
+                    //CODIGO DEPRECADO. CONTINUAR TRABAJANDO CON EL ARCHIVO .C EN SU LUGAR
+
 void blockPC();
 
 int tiempoDeTrabajo = 45;         // tiempo del pomodoro en minutos (periodo de trabajo)

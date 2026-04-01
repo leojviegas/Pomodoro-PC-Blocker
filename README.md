@@ -21,3 +21,4 @@ Este programa implementa un **bloqueador de PC basado en la técnica Pomodoro**,
 1. Compila el programa:
    ```bash
    gcc -o pomodoroPCBlocker pomodoroPCBlocker.c
+2. Ejecuta el .exe y sigue las instrucciones en pantalla para definir los tiempos (en minutos) de trabajo, descanso corto, descanso largo, y repeticiones totales
